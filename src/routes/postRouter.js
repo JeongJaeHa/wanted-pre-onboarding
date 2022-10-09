@@ -9,4 +9,6 @@ router.get("/list/search", errorHandler(postController.searchPost)); // 리스�
 
 router.get("/detail", errorHandler(postController.detailPost)); // 상세정보
 
+router.post("/register", errorHandler(postController.registerPost)); //채용공고 등록
+
 module.exports = { router };

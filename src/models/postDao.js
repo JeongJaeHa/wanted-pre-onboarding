@@ -91,11 +91,53 @@ const getCorperationId = async(id) => {
     )
 }
 
+const getCorperationIdByName = async (name) => {
+    return await AppDataSource.query(
+        `
+        SELECT id FROM corps
+        WHERE name='${name}'
+        `
+    )
+}
+
+const getPositionId = async (position) => {
+    return await AppDataSource.query(
+        `
+        SELECT id FROM positions
+        WHERE position='${position}'
+        `
+    )
+}
+
+const getSkillId = async (skill) => {
+    return await AppDataSource.query(
+        `
+        SELECT id FROM skills
+        WHERE skill='${skill}'
+        `
+    )
+}
+
+const registerPost = async (title, corperationId, positionId, skillId, compensation, explanation, deadline) => {
+    return await AppDataSource.query(
+        `
+        INSERT INTO posts
+        (title, corp_id, position_id, skill_id, compensation, explanation, deadline)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        `, [title, corperationId, positionId, skillId, compensation, explanation, deadline]
+    )
+}
+
 module.exports = {
     listPost,
     searchPost,
     getCorperationInformation,
     getDetail,
     getOtherPost,
-    getCorperationId
+    getCorperationId,
+    getCorperationIdByName,
+    getCorperationId,
+    getPositionId,
+    getSkillId,
+    registerPost
 }
