@@ -1,6 +1,7 @@
 const postDao = require("../models/postDao");
 const Error = require("../middlewares/errorConstructor");
 const information = require("../utils/getId");
+const postCheck = require("../utils/existCheck");
 
 const listPost = async() => {
     const getList = await postDao.listPost();
@@ -35,10 +36,22 @@ const registerPost = async (title, name, position, skill, compensation, explanat
     return true;
 }
 
+const editPost = async (id, title, name, position, skill, compensation, explanation, deadline) => {
+    await postCheck.checkPost(id);
+    const corperationId = await information.getInformationIdByName(name);
+    const positionId = await information.getPositionId(position);
+    const skillId = await information.getSkillId(skill);
+
+    await postDao.editPost(id, title, corperationId, positionId, skillId, compensation, explanation, deadline);
+    return true;
+}
+
+
 
 module.exports = {
     listPost,
     searchPost,
     detailPost,
-    registerPost
+    registerPost,
+    editPost
 }

@@ -11,4 +11,6 @@ router.get("/detail", errorHandler(postController.detailPost)); // 상세정보
 
 router.post("/register", errorHandler(postController.registerPost)); //채용공고 등록
 
+router.put("/", errorHandler(postController.editPost)); //채용공고 수정
+
 module.exports = { router };
