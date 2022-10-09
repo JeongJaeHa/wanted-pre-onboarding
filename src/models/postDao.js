@@ -156,6 +156,14 @@ const checkPost = async (id) => {
     )
 }
 
+const deletePost = async (id) => {
+    return await AppDataSource.query(
+        `
+        DELETE FROM posts WHERE id=${id}
+        `
+    )
+}
+
 module.exports = {
     listPost,
     searchPost,
@@ -169,5 +177,6 @@ module.exports = {
     getSkillId,
     registerPost,
     editPost,
-    checkPost
+    checkPost,
+    deletePost
 }
