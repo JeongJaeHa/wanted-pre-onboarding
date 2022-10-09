@@ -164,6 +164,31 @@ const deletePost = async (id) => {
     )
 }
 
+const applyPost = async (id, userId) => {
+    return await AppDataSource.query(
+        `
+        INSERT INTO applications (post_id, user_id)
+        VALUES (${id}, ${userId})
+        `
+    )
+}
+
+const checkApply = async (id, userId) => {
+    return await AppDataSource.query(
+        `
+        SELECT EXISTS (SELECT * FROM applications WHERE user_id=${userId} AND post_id=${id})
+        `
+    )
+}
+
+const applyDelete = async (id, userId) => {
+    return await AppDataSource.query(
+        `
+        DELETE FROM applications WHERE post_id=${id} AND user_id=${userId}
+        `
+    )
+}
+
 module.exports = {
     listPost,
     searchPost,
@@ -178,5 +203,8 @@ module.exports = {
     registerPost,
     editPost,
     checkPost,
-    deletePost
+    deletePost,
+    applyPost,
+    checkApply,
+    applyDelete
 }
