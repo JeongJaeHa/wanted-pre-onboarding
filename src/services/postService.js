@@ -53,6 +53,7 @@ const deletePost = async (id) => {
 }
 
 const applyPost = async (id, userId) => {
+    await postCheck.checkPost(id);
     const result = await postCheck.checkApply(id, userId);
     if (result === true) {
         return true;
