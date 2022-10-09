@@ -4,18 +4,21 @@
 - 본 서비스는 기업의 채용을 위한 웹 서비스 입니다.
 - 회사는 채용공고를 생성하고, 이에 사용자는 지원합니다.
 <br/>
-### 기술스택
+
+# 기술스택
 - JavaScript<br/>
 - Node.js / Express<br/>
 - MySQL 8.0<br/>
 - Postman<br/>
 <br/>
 <br/>
+
 # ERD<br/>
-![ERD](https://user-images.githubusercontent.com/99805929/194757229-0410b241-e7ec-48ed-97db-d18f655e1a97.png)
+<img width="957" alt="스크린샷 2022-10-09 오후 9 37 39" src="https://user-images.githubusercontent.com/99805929/194757849-09865043-1893-4ff4-99d8-18de5aa2d3e8.png">
 <br/>
 <br/>
-# API documentation<br/>
+
+# API Documentation<br/>
 [API documentation](https://documenter.getpostman.com/view/22378810/2s83tJEVB9)
 <br/>
 <br/>
