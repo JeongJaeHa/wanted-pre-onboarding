@@ -1,0 +1,6 @@
+node_modules
+.env
+db/schema.sql
+.DS_Store
+.vscode
+.env.test

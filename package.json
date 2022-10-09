@@ -1,0 +1,37 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dbmate": "^1.0.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "jest": "^29.1.2",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.20",
+    "typeorm": "^0.3.10"
+  },
+  "name": "wanted-pre-onboarding",
+  "description": "wanted pre onboarding",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeongJaeHa/wanted-pre-onboarding.git"
+  },
+  "keywords": [
+    "wanted"
+  ],
+  "author": "jaeha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JeongJaeHa/wanted-pre-onboarding/issues"
+  },
+  "homepage": "https://github.com/JeongJaeHa/wanted-pre-onboarding#readme",
+  "devDependencies": {
+    "supertest": "^6.2.4"
+  }
+}
