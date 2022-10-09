@@ -44,7 +44,17 @@ const deletePost= async (req, res) => {
     const { id } = req.query
     const result = await postService.deletePost(id);
     if (result === true){
-        res.status(204).json({});
+        return res.status(204).json({});
+    }
+}
+
+const applyPost = async (req, res) => {
+    const { id, userId } = req.body
+    const applyPost = await postService.applyPost(id, userId);
+    if( applyPost === true){
+        return res.status(200).json({"message":"success apply", "post_id": id, "user_id": userId });
+    } else {
+        return res.status(200).json({"message":"success delete apply", "post_id": id, "user_id": userId});
     }
 }
 
@@ -54,5 +64,6 @@ module.exports = {
     detailPost,
     registerPost,
     editPost,
-    deletePost
+    deletePost,
+    applyPost
 }

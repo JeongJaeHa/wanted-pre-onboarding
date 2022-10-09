@@ -15,4 +15,6 @@ router.put("/", errorHandler(postController.editPost)); //채용공고 수정
 
 router.delete("/", errorHandler(postController.deletePost)); // 채용공고 삭제
 
+router.post("/apply", errorHandler(postController.applyPost)) // 채용공고 지원
+
 module.exports = { router };

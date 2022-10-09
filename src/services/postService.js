@@ -52,11 +52,21 @@ const deletePost = async (id) => {
     return true;
 }
 
+const applyPost = async (id, userId) => {
+    const result = await postCheck.checkApply(id, userId);
+    if (result === true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 module.exports = {
     listPost,
     searchPost,
     detailPost,
     registerPost,
     editPost,
-    deletePost
+    deletePost,
+    applyPost
 }
