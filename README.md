@@ -5,23 +5,23 @@
 - 회사는 채용공고를 생성하고, 이에 사용자는 지원합니다.
 <br/>
 ### 기술스택
-- JavaScript
-- Node.js / Express
-- MySQL 8.0
-- Postman
+- JavaScript<br/>
+- Node.js / Express<br/>
+- MySQL 8.0<br/>
+- Postman<br/>
 <br/>
 <br/>
-# ERD
+# ERD<br/>
 ![ERD](https://user-images.githubusercontent.com/99805929/194757229-0410b241-e7ec-48ed-97db-d18f655e1a97.png)
 <br/>
 <br/>
-# API documentation
+# API documentation<br/>
 [API documentation](https://documenter.getpostman.com/view/22378810/2s83tJEVB9)
 <br/>
 <br/>
 # 요구사항 분석 및 구현내용
 ## 요구사항 분석
- 1. 요구사항이 채용공고를 통해 일어나는 행위들이라고 생각하여 채용공고(posts)를 메인 테이블로 구현을 진행하였습니다.
+ 1. 요구사항이 채용공고를 중심으로 이루어지는 기능들이라고 생각하여 채용공고(posts)를 메인 테이블로 생각하고 구현을 진행하였습니다.
  --- 
 
 ## 구현내용
@@ -48,7 +48,7 @@ Response
     "message": "채용공고 등록에 성공하였습니다!"
 }
 ```
----
+
 ### **2. 채용공고를 수정합니다.**
 2-1. 채용공고 등록과 동일한 과정으로 진행되나 데이터 전송시 게시글 id도 추가로 전송합니다.<br/>
 ```javaScript
@@ -76,7 +76,8 @@ Response
 ```javascript
 http://127.0.0.1:8080/post?id=93
 ```
-#### 4-1. 채용공고 목록을 가져옵니다.
+
+### **4-1. 채용공고 목록을 가져옵니다.**
 4-1 엔드포인트에 요청 시 posts 테이블에 있는 전체 게시글을 불러옵니다.
 ```javascript
 http://127.0.0.1:8080/post/list
@@ -103,8 +104,8 @@ http://127.0.0.1:8080/post/list
   ]
 }
 ```
-#### 4-2. 채용공고 검색기능 구현
-4-2 4-1에서 Response하는 데이터와 유사하나 키워드가 존재하는 게시글들만 전송합니다.
+### **4-2. 채용공고 검색기능 구현**
+4-2 4-1에서 Response하는 데이터와 유사하나 키워드가 일치하는 게시글들만 전송합니다.
 ```javascript
 http://127.0.0.1:8080/post/list/search?keyword=원티드
 ```
