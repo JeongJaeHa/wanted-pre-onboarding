@@ -18,7 +18,14 @@ const searchPost = async (req, res) => {
     } else res.status(200).json({"result": getSearchPost});
 }
 
+const detailPost = async (req, res) => {
+    const { id } = req.query
+    const getDetailPost = await postService.detailPost(id);
+    res.status(200).json({"detailPost": getDetailPost});
+}
+
 module.exports = {
     listPost,
-    searchPost
+    searchPost,
+    detailPost
 }
