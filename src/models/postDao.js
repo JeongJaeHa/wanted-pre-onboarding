@@ -128,6 +128,34 @@ const registerPost = async (title, corperationId, positionId, skillId, compensat
     )
 }
 
+const editPost = async (id, title, getCorpId, getPositionId, getSkillId, compensation, explanation, deadline) => {
+    return await AppDataSource.query(
+        `
+        UPDATE posts
+        SET 
+        title = "${title}",
+        corp_id = ${getCorpId},
+        position_id = ${getPositionId},
+        skill_id = ${getSkillId},
+        compensation = ${compensation},
+        explanation = "${explanation}",
+        deadline = "${deadline}"
+        WHERE id=${id}
+        `
+    )
+}
+
+const checkPost = async (id) => {
+    return await AppDataSource.query(
+        `
+        SELECT EXISTS (
+            SELECT * FROM posts p
+            WHERE p.id=${id}
+        )
+        `
+    )
+}
+
 module.exports = {
     listPost,
     searchPost,
@@ -139,5 +167,7 @@ module.exports = {
     getCorperationId,
     getPositionId,
     getSkillId,
-    registerPost
+    registerPost,
+    editPost,
+    checkPost
 }

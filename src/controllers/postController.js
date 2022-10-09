@@ -27,14 +27,23 @@ const detailPost = async (req, res) => {
 const registerPost = async (req, res) => {
     const { title, name, position, skill, compensation, explanation, deadline } = req.body
     if( !title || !name || !skill || !compensation || !explanation || !deadline ) {
-        res.status(400).json({"message":"빈칸 없이 모두 입력해주세요"})
+        return res.status(400).json({"message":"빈칸 없이 모두 입력해주세요"})
     } else await postService.registerPost(title, name, position, skill, compensation, explanation, deadline);
-    res.status(200).json({"message": "채용공고 등록에 성공하였습니다!"});
+    return res.status(200).json({"message": "채용공고 등록에 성공하였습니다!"});
 };
+
+const editPost= async (req, res) => {
+    const { id, title, name, position, skill, compensation, explanation, deadline } = req.body
+    if( !id || !title || !name || !skill || !compensation || !explanation || !deadline ) {
+        return res.status(400).json({"message":"빈칸 없이 모두 입력해주세요"})
+    } else await postService.editPost(id, title, name, position, skill, compensation, explanation, deadline);
+    return res.status(200).json({"message": "edit success"});
+}
 
 module.exports = {
     listPost,
     searchPost,
     detailPost,
-    registerPost
+    registerPost,
+    editPost
 }
