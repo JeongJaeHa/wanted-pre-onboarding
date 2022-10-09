@@ -150,8 +150,7 @@ const checkPost = async (id) => {
         `
         SELECT EXISTS (
             SELECT * FROM posts p
-            WHERE p.id=${id}
-        )
+            WHERE p.id=${id})
         `
     )
 }
