@@ -26,8 +26,19 @@ const detailPost = async(id) => {
     return [getDetailPage, getOtherPostsResult];
 }
 
+const registerPost = async (title, name, position, skill, compensation, explanation, deadline) => {
+    const corperationId = await information.getInformationIdByName(name);
+    const positionId = await information.getPositionId(position);
+    const skillId = await information.getSkillId(skill);
+
+    await postDao.registerPost(title, corperationId, positionId, skillId, compensation, explanation, deadline);
+    return true;
+}
+
+
 module.exports = {
     listPost,
     searchPost,
-    detailPost
+    detailPost,
+    registerPost
 }
