@@ -13,4 +13,6 @@ router.post("/register", errorHandler(postController.registerPost)); //채용공
 
 router.put("/", errorHandler(postController.editPost)); //채용공고 수정
 
+router.delete("/", errorHandler(postController.deletePost)); // 채용공고 삭제
+
 module.exports = { router };

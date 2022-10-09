@@ -46,12 +46,17 @@ const editPost = async (id, title, name, position, skill, compensation, explanat
     return true;
 }
 
-
+const deletePost = async (id) => {
+    await postCheck.checkPost(id);
+    await postDao.deletePost(id);
+    return true;
+}
 
 module.exports = {
     listPost,
     searchPost,
     detailPost,
     registerPost,
-    editPost
+    editPost,
+    deletePost
 }

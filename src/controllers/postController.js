@@ -40,10 +40,19 @@ const editPost= async (req, res) => {
     return res.status(200).json({"message": "edit success"});
 }
 
+const deletePost= async (req, res) => {
+    const { id } = req.query
+    const result = await postService.deletePost(id);
+    if (result === true){
+        res.status(204).json({});
+    }
+}
+
 module.exports = {
     listPost,
     searchPost,
     detailPost,
     registerPost,
-    editPost
+    editPost,
+    deletePost
 }
