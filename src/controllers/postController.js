@@ -9,9 +9,8 @@ const listPost = async (req, res) => {
 
 const searchPost = async (req, res) => {
     const { keyword } = req.query
-    if ( keyword === '') {
-        throw new Error("검색어를 입력해주세요", 400);
-    }
+    if ( keyword === '') throw new Error("검색어를 입력해주세요", 400);
+    
     const getSearchPost = await postService.searchPost(keyword);
     if(getSearchPost.length === 0) {
         res.status(204).json({"message": "검색결과가 없습니다."});
@@ -48,22 +47,11 @@ const deletePost= async (req, res) => {
     }
 }
 
-const applyPost = async (req, res) => {
-    const { id, userId } = req.body
-    const applyPost = await postService.applyPost(id, userId);
-    if( applyPost === true){
-        return res.status(200).json({"message":"success apply", "post_id": id, "user_id": userId });
-    } else {
-        return res.status(200).json({"message":"success delete apply", "post_id": id, "user_id": userId});
-    }
-}
-
 module.exports = {
     listPost,
     searchPost,
     detailPost,
     registerPost,
     editPost,
-    deletePost,
-    applyPost
+    deletePost
 }

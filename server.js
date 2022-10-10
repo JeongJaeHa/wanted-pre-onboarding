@@ -20,7 +20,7 @@ const startServer = async () => {
         })
         .catch((err) => {
             console.error("Error during Data Source initialization", err);
-            database.destroy()
+            AppDataSource.destroy()
         })
 
     server.listen(PORT, () => {
