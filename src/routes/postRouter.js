@@ -1,20 +1,17 @@
 const express = require("express");
 const postController = require("../controllers/postController");
-const errorHandler = require("../middlewares/errorHandler")
 const router = express.Router();
 
-router.get("/list", errorHandler(postController.listPost)); // 리스트
+router.get("/list", postController.listPost);
 
-router.get("/list/search", errorHandler(postController.searchPost)); // 리스트 검색
+router.get("/list/search", postController.searchPost);
 
-router.get("/detail", errorHandler(postController.detailPost)); // 상세정보
+router.get("/detail", postController.detailPost);
 
-router.post("/register", errorHandler(postController.registerPost)); //채용공고 등록
+router.post("/register", postController.registerPost);
 
-router.put("/", errorHandler(postController.editPost)); //채용공고 수정
+router.put("/", postController.editPost);
 
-router.delete("/", errorHandler(postController.deletePost)); // 채용공고 삭제
-
-router.post("/apply", errorHandler(postController.applyPost)) // 채용공고 지원
+router.delete("/", postController.deletePost); 
 
 module.exports = { router };

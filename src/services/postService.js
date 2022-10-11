@@ -1,7 +1,6 @@
 const postDao = require("../models/postDao");
 const Error = require("../middlewares/errorConstructor");
-const information = require("../utils/getId");
-const postCheck = require("../utils/existCheck");
+const existCheck = require("../utils/existCheck");
 
 const listPost = async() => {
     const getList = await postDao.listPost();
@@ -14,52 +13,41 @@ const searchPost = async(keyword) => {
 }
 
 const detailPost = async(id) => {
-    const corperationId = await information.getCorperationId(id);
-    if (corperationId.length === 0) {
-        throw new Error("NOT EXISTS POST", 400);
-    }
+    await existCheck.checkPost(id);
+    const name = await existCheck.getName(id);
+    const corperation_id = await existCheck.corperation(name);
 
     const getDetailPage = await postDao.getDetail(id);
-
-    const getOtherPosts = await postDao.getOtherPost(corperationId);
+    const getOtherPosts = await postDao.getOtherPost(corperation_id);
     const getOtherPostsResult = JSON.parse(Object.values(getOtherPosts[0])[0]);
 
     return [getDetailPage, getOtherPostsResult];
 }
 
 const registerPost = async (title, name, position, skill, compensation, explanation, deadline) => {
-    const corperationId = await information.getInformationIdByName(name);
-    const positionId = await information.getPositionId(position);
-    const skillId = await information.getSkillId(skill);
+    const corperation_id = await existCheck.corperation(name);
 
-    await postDao.registerPost(title, corperationId, positionId, skillId, compensation, explanation, deadline);
+    await postDao.registerPost(title, name, position, skill, compensation, explanation, deadline, corperation_id);
     return true;
 }
 
 const editPost = async (id, title, name, position, skill, compensation, explanation, deadline) => {
-    await postCheck.checkPost(id);
-    const corperationId = await information.getInformationIdByName(name);
-    const positionId = await information.getPositionId(position);
-    const skillId = await information.getSkillId(skill);
+    await existCheck.checkPost(id);
+    await existCheck.corperation(name);
 
-    await postDao.editPost(id, title, corperationId, positionId, skillId, compensation, explanation, deadline);
+    await postDao.editPost(id, title, name, position, skill, compensation, explanation, deadline);
     return true;
 }
 
 const deletePost = async (id) => {
-    await postCheck.checkPost(id);
-    await postDao.deletePost(id);
+    const result = await existCheck.checkPost(id);
+    if (result) await postDao.deletePost(id);
     return true;
 }
 
 const applyPost = async (id, userId) => {
-    await postCheck.checkPost(id);
-    const result = await postCheck.checkApply(id, userId);
-    if (result === true) {
-        return true;
-    } else {
-        return false;
-    }
+    await existCheck.checkPost(id);
+    await existCheck.checkApply(id, userId);
 }
 
 module.exports = {

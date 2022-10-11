@@ -1,191 +1,125 @@
 const { AppDataSource } = require("./datasource");
+const Error = require("../middlewares/errorConstructor");
+const corperation = require("../entities/corperations");
+const post = require("../entities/posts");
 
 const listPost = async() => {
-    return AppDataSource.query(
-        `
-        SELECT 
-        p.title,
-        c.name,
-        l.location,
-        pp.position,
-        ps.skill
-        FROM posts p
-        LEFT JOIN skills ps ON p.skill_id = ps.id
-        LEFT JOIN positions pp ON p.position_id = pp.id
-        LEFT JOIN corps c ON p.corp_id = c.id
-        LEFT JOIN locations l ON c.location_id = l.id
-        `
-    )
+    return AppDataSource
+        .createQueryBuilder()
+        .select(["post.id AS id",
+        "post.title AS title",
+        "post.skill AS skill",
+        "post.position AS position",
+        "post.name AS name"])
+        .from(post, "post")
+        .execute()
 }
 
 const searchPost = async(keyword) => {
-    return AppDataSource.query(
-        `
-        SELECT 
-        p.title,
-        c.name,
-        l.location,
-        pp.position,
-        ps.skill
-        FROM posts p
-        LEFT JOIN skills ps ON p.skill_id = ps.id
-        LEFT JOIN positions pp ON p.position_id = pp.id
-        LEFT JOIN corps c ON p.corp_id = c.id
-        LEFT JOIN locations l ON c.location_id = l.id
-        WHERE CONCAT(p.title, c.name, l.location, pp.position, ps.skill) REGEXP '${keyword}'
-        `
-    )
+    return AppDataSource
+        .createQueryBuilder()
+        .select(
+            ["post.id AS id",
+            "post.title AS title",
+            "post.skill AS skill",
+            "post.position AS position",
+            "post.name AS name"])
+        .from(post, "post")
+        .where("post.name like :keyword", { keyword: `%${keyword}%` })
+        .orWhere("post.title like :keyword", { keyword: `%${keyword}%` })
+        .orWhere("post.position like :keyword", { keyword: `%${keyword}%` })
+        .orWhere("post.skill like :keyword", { keyword: `%${keyword}%` } )
+        .execute()
 }
 
-
 const getCorperationInformation = async(id) => {
-    return AppDataSource.query(
-        `
-        SELECT corp_id FROM posts WHERE id=${id}
-        `
-    )
+    return AppDataSource
+        .createQueryBuilder()
+        .select("corperation_id")
+        .from(post, "post")
+        .where("id = :id", { id: id })
 }
 
 const getDetail = async (id) => {
+    return AppDataSource
+        .createQueryBuilder()
+        .select(
+            ["post.id AS id",
+            "post.title AS title",
+            "post.skill AS skill",
+            "post.position As postiion",
+            "post.name AS name",
+            "corperation.location AS location",
+            "post.compensation AS compensation",
+            "post.deadline AS deadline",
+            "post.explanation AS explanation"
+        ])
+        .from(post, "post")
+        .innerJoin(corperation, "corperation", "post.corperation_id = corperation.id")
+        .where("post.id = :id", {id: id})
+        .execute()
+}
+
+const getOtherPost = async (corperation_id) => {
     return AppDataSource.query(
         `
-        SELECT 
-        p.title,
-        c.name,
-        l.location,
-        pp.position,
-        ps.skill,
-        p.compensation,
-        p.explanation,
-        p.deadline
-        FROM posts p
-        LEFT JOIN skills ps ON p.skill_id = ps.id
-        LEFT JOIN positions pp ON p.position_id = pp.id
-        LEFT JOIN corps c ON p.corp_id = c.id
-        LEFT JOIN locations l ON c.location_id = l.id
-        WHERE p.id=${id}
+        SELECT JSON_ARRAYAGG(p.id) AS other FROM post p WHERE corperation_id=${corperation_id}
         `
     )
 }
 
-const getOtherPost = async (corp_id) => {
-    return AppDataSource.query(
-        `
-        SELECT(SELECT
-            JSON_ARRAYAGG(
-                JSON_OBJECT(
-                    "otherPostsId", p.id
-                )
-            ) JSON ) as other_posts
-            FROM posts p
-            WHERE corp_id=${corp_id}
-        `
-    )
+const registerPost = async (title, name, position, skill, compensation, explanation, deadline, corperation_id) => {
+    try {
+        return await AppDataSource
+            .createQueryBuilder()
+            .insert()
+            .into("post")
+            .values({title, name, position, skill, compensation, explanation, deadline, corperation_id})   
+            .execute()     
+    } catch(err) {
+        throw new  Error("INVALID DATA INPUT", 500);
+    }
 }
 
-const getCorperationId = async(id) => {
-    return AppDataSource.query(
-        `
-        SELECT corp_id FROM posts WHERE id=${id}
-        `
-    )
+const editPost = async (id, title, name, position, skill, compensation, explanation, deadline) => {
+    try {
+        return await AppDataSource
+            .createQueryBuilder()
+            .update("post")
+            .set({id, title, name, position, skill, compensation, explanation, deadline})
+            .where("id=:id", {id: id})  
+            .execute()     
+    } catch(err) {
+        throw new  Error("INVALID DATA INPUT", 500);
+    }
 }
 
 const getCorperationIdByName = async (name) => {
-    return await AppDataSource.query(
-        `
-        SELECT id FROM corps
-        WHERE name='${name}'
-        `
-    )
-}
-
-const getPositionId = async (position) => {
-    return await AppDataSource.query(
-        `
-        SELECT id FROM positions
-        WHERE position='${position}'
-        `
-    )
-}
-
-const getSkillId = async (skill) => {
-    return await AppDataSource.query(
-        `
-        SELECT id FROM skills
-        WHERE skill='${skill}'
-        `
-    )
-}
-
-const registerPost = async (title, corperationId, positionId, skillId, compensation, explanation, deadline) => {
-    return await AppDataSource.query(
-        `
-        INSERT INTO posts
-        (title, corp_id, position_id, skill_id, compensation, explanation, deadline)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, [title, corperationId, positionId, skillId, compensation, explanation, deadline]
-    )
-}
-
-const editPost = async (id, title, getCorpId, getPositionId, getSkillId, compensation, explanation, deadline) => {
-    return await AppDataSource.query(
-        `
-        UPDATE posts
-        SET 
-        title = "${title}",
-        corp_id = ${getCorpId},
-        position_id = ${getPositionId},
-        skill_id = ${getSkillId},
-        compensation = ${compensation},
-        explanation = "${explanation}",
-        deadline = "${deadline}"
-        WHERE id=${id}
-        `
-    )
+        return await AppDataSource
+            .createQueryBuilder()
+            .select("id")
+            .from(corperation, "corperation")
+            .where("name=:name", {name: name})
+            .execute();
 }
 
 const checkPost = async (id) => {
     return await AppDataSource.query(
         `
         SELECT EXISTS (
-            SELECT * FROM posts p
+            SELECT * FROM post p
             WHERE p.id=${id})
         `
     )
 }
 
 const deletePost = async (id) => {
-    return await AppDataSource.query(
-        `
-        DELETE FROM posts WHERE id=${id}
-        `
-    )
-}
-
-const applyPost = async (id, userId) => {
-    return await AppDataSource.query(
-        `
-        INSERT INTO applications (post_id, user_id)
-        VALUES (${id}, ${userId})
-        `
-    )
-}
-
-const checkApply = async (id, userId) => {
-    return await AppDataSource.query(
-        `
-        SELECT EXISTS (SELECT * FROM applications WHERE user_id=${userId} AND post_id=${id})
-        `
-    )
-}
-
-const applyDelete = async (id, userId) => {
-    return await AppDataSource.query(
-        `
-        DELETE FROM applications WHERE post_id=${id} AND user_id=${userId}
-        `
-    )
+    return await AppDataSource
+        .createQueryBuilder()
+        .delete()
+        .from(post, "post")
+        .where("id=:id", {id: id})
+        .execute()
 }
 
 module.exports = {
@@ -194,16 +128,9 @@ module.exports = {
     getCorperationInformation,
     getDetail,
     getOtherPost,
-    getCorperationId,
-    getCorperationIdByName,
-    getCorperationId,
-    getPositionId,
-    getSkillId,
     registerPost,
     editPost,
+    getCorperationIdByName,
     checkPost,
-    deletePost,
-    applyPost,
-    checkApply,
-    applyDelete
+    deletePost
 }

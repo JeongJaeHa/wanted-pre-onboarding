@@ -1,4 +1,8 @@
 const { DataSource } = require("typeorm");
+const users = require("../entities/user");
+const corperations = require("../entities/corperations");
+const applications = require("../entities/applications");
+const posts = require("../entities/posts");
 
 const AppDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION,
@@ -7,6 +11,9 @@ const AppDataSource = new DataSource({
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
+  entities: [users, corperations, applications, posts],
+  synchronize: false,
+  logging: true,
   TIME_ZONE: process.env.TIME_ZONE
 });
 
