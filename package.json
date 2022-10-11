@@ -18,7 +18,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles=dotenv/config"
+    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles=dotenv/config --detectOpenHandles"
   },
   "repository": {
     "type": "git",
