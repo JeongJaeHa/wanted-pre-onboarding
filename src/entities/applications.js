@@ -23,13 +23,15 @@ module.exports = new EntitySchema({
         joinColumn: {
             name: 'post_id',
             },
+        cascade: true,
         },
         users: {
-            type: 'many-to-one',
-            target: 'user',
-            joinColumn: {
+        type: 'many-to-one',
+        target: 'user',
+        joinColumn: {
             name: 'user_id',
             },
+        cascade: true,
         }
     },
     uniques: [

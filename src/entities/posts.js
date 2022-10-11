@@ -58,7 +58,8 @@ module.exports = new EntitySchema({
         target: 'corperation',
         joinColumn: {
             name: 'corperation_id',
-        },   
+        },
+        cascade: true, 
         }
     },
 });
