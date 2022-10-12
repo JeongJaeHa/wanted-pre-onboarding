@@ -4,18 +4,24 @@ const corperation = require("../entities/corperations");
 const post = require("../entities/posts");
 
 const listPost = async() => {
+    try{
     return AppDataSource
         .createQueryBuilder()
         .select(["post.id AS id",
         "post.title AS title",
         "post.skill AS skill",
         "post.position AS position",
-        "post.name AS name"])
+        "corperation.name AS name"])
         .from(post, "post")
-        .execute()
+        .innerJoin(corperation, "corperation", "post.corperation_id = corperation.id")
+        .execute()}
+    catch(err) {
+        throw new Error("INVALID DATA INPUT", 500)
+    }
 }
 
 const searchPost = async(keyword) => {
+    try{
     return AppDataSource
         .createQueryBuilder()
         .select(
@@ -23,24 +29,33 @@ const searchPost = async(keyword) => {
             "post.title AS title",
             "post.skill AS skill",
             "post.position AS position",
-            "post.name AS name"])
+            "corperation.name AS name"])
         .from(post, "post")
-        .where("post.name like :keyword", { keyword: `%${keyword}%` })
+        .innerJoin(corperation, "corperation", "post.corperation_id = corperation.id")
+        .where("corperation.name like :keyword", { keyword: `%${keyword}%` })
         .orWhere("post.title like :keyword", { keyword: `%${keyword}%` })
         .orWhere("post.position like :keyword", { keyword: `%${keyword}%` })
         .orWhere("post.skill like :keyword", { keyword: `%${keyword}%` } )
-        .execute()
+        .execute()}
+    catch(err) {
+        throw new Error("INVALID DATA INPUT", 500)
+    }
 }
 
 const getCorperationInformation = async(id) => {
+    try{
     return AppDataSource
         .createQueryBuilder()
         .select("corperation_id")
         .from(post, "post")
-        .where("id = :id", { id: id })
+        .where("id = :id", { id: id })}
+    catch(err) {
+        throw new  Error("INVALID DATA INPUT", 500)
+    }
 }
 
 const getDetail = async (id) => {
+    try{
     return AppDataSource
         .createQueryBuilder()
         .select(
@@ -48,8 +63,8 @@ const getDetail = async (id) => {
             "post.title AS title",
             "post.skill AS skill",
             "post.position As postiion",
-            "post.name AS name",
             "corperation.location AS location",
+            "corperation.name AS name",
             "post.compensation AS compensation",
             "post.deadline AS deadline",
             "post.explanation AS explanation"
@@ -57,36 +72,43 @@ const getDetail = async (id) => {
         .from(post, "post")
         .innerJoin(corperation, "corperation", "post.corperation_id = corperation.id")
         .where("post.id = :id", {id: id})
-        .execute()
+        .execute()}
+    catch (err) {
+        throw new Error("INVALID DATA INPUT", 500);
+    }
 }
 
 const getOtherPost = async (corperation_id) => {
+    try{
     return AppDataSource.query(
         `
         SELECT JSON_ARRAYAGG(p.id) AS other FROM post p WHERE corperation_id=${corperation_id}
         `
-    )
+    )}
+    catch(err) {
+        throw new Error("INVALID DATA INPUT", 500)
+    }
 }
 
-const registerPost = async (title, name, position, skill, compensation, explanation, deadline, corperation_id) => {
+const registerPost = async (title, position, skill, compensation, explanation, deadline, corperation_id) => {
     try {
         return await AppDataSource
             .createQueryBuilder()
             .insert()
             .into("post")
-            .values({title, name, position, skill, compensation, explanation, deadline, corperation_id})   
+            .values({title, position, skill, compensation, explanation, deadline, corperation_id})   
             .execute()     
     } catch(err) {
         throw new  Error("INVALID DATA INPUT", 500);
     }
 }
 
-const editPost = async (id, title, name, position, skill, compensation, explanation, deadline) => {
+const editPost = async (id, title, corperation_id, position, skill, compensation, explanation, deadline) => {
     try {
         return await AppDataSource
             .createQueryBuilder()
             .update("post")
-            .set({id, title, name, position, skill, compensation, explanation, deadline})
+            .set({id, title, corperation_id, position, skill, compensation, explanation, deadline})
             .where("id=:id", {id: id})  
             .execute()     
     } catch(err) {
@@ -95,31 +117,43 @@ const editPost = async (id, title, name, position, skill, compensation, explanat
 }
 
 const getCorperationIdByName = async (name) => {
+    try{
         return await AppDataSource
             .createQueryBuilder()
             .select("id")
             .from(corperation, "corperation")
             .where("name=:name", {name: name})
-            .execute();
+            .execute()}
+    catch(err) {
+        throw new Error("INVALID DATA INPUT", 500);
+    }
 }
 
 const checkPost = async (id) => {
+    try{
     return await AppDataSource.query(
         `
         SELECT EXISTS (
             SELECT * FROM post p
             WHERE p.id=${id})
         `
-    )
+    )}
+    catch(err) {
+        throw new  Error("INVALID DATA INPUT", 500);
+    }
 }
 
 const deletePost = async (id) => {
-    return await AppDataSource
-        .createQueryBuilder()
-        .delete()
-        .from(post, "post")
-        .where("id=:id", {id: id})
-        .execute()
+    try{
+        return await AppDataSource
+            .createQueryBuilder()
+            .delete()
+            .from(post, "post")
+            .where("id=:id", {id: id})
+            .execute()}
+    catch(err) {
+        throw new  Error("INVALID DATA INPUT", 500);
+    }
 }
 
 module.exports = {
