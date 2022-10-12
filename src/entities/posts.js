@@ -13,10 +13,6 @@ module.exports = new EntitySchema({
             type: "varchar",
             nullable: false
         },
-        name: {
-            type: "varchar",
-            nullable: false
-        },
         corperation_id: {
             type: "int",
             nullable: false
@@ -59,7 +55,7 @@ module.exports = new EntitySchema({
         joinColumn: {
             name: 'corperation_id',
         },
-        cascade: true, 
+        onDelete: "CASCADE", 
         }
     },
 });

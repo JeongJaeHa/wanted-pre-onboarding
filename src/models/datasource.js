@@ -12,8 +12,8 @@ const AppDataSource = new DataSource({
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
   entities: [users, corperations, applications, posts],
-  synchronize: false,
-  logging: true,
+  synchronize: true,
+  logging: false,
   TIME_ZONE: process.env.TIME_ZONE
 });
 

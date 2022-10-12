@@ -9,8 +9,7 @@
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.20",
-    "typeorm": "^0.3.10",
-    "typeorm-model-generator": "^0.4.6"
+    "typeorm": "^0.3.10"
   },
   "name": "wanted-pre-onboarding",
   "description": "wanted pre onboarding",
@@ -18,7 +17,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles=dotenv/config --detectOpenHandles"
+    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles=dotenv/config --detectOpenHandles "
   },
   "repository": {
     "type": "git",

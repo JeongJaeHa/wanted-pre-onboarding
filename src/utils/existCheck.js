@@ -25,6 +25,7 @@ const checkApply = async function(id, userId) {
     } catch(err) {
         throw new Error("이미 지원한 채용공고 입니다.", 400);
     }
+    return true;
 };
 
 const getName = async function(id) {

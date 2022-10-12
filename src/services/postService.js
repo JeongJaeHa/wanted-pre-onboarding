@@ -27,15 +27,15 @@ const detailPost = async(id) => {
 const registerPost = async (title, name, position, skill, compensation, explanation, deadline) => {
     const corperation_id = await existCheck.corperation(name);
 
-    await postDao.registerPost(title, name, position, skill, compensation, explanation, deadline, corperation_id);
+    await postDao.registerPost(title, position, skill, compensation, explanation, deadline, corperation_id);
     return true;
 }
 
 const editPost = async (id, title, name, position, skill, compensation, explanation, deadline) => {
     await existCheck.checkPost(id);
-    await existCheck.corperation(name);
+    const corperation_id = await existCheck.corperation(name);
 
-    await postDao.editPost(id, title, name, position, skill, compensation, explanation, deadline);
+    await postDao.editPost(id, title, corperation_id, position, skill, compensation, explanation, deadline);
     return true;
 }
 
@@ -45,17 +45,11 @@ const deletePost = async (id) => {
     return true;
 }
 
-const applyPost = async (id, userId) => {
-    await existCheck.checkPost(id);
-    await existCheck.checkApply(id, userId);
-}
-
 module.exports = {
     listPost,
     searchPost,
     detailPost,
     registerPost,
     editPost,
-    deletePost,
-    applyPost
+    deletePost
 }

@@ -23,7 +23,7 @@ module.exports = new EntitySchema({
         joinColumn: {
             name: 'post_id',
             },
-        cascade: true,
+        onDelete: "CASCADE",
         },
         users: {
         type: 'many-to-one',
@@ -31,7 +31,7 @@ module.exports = new EntitySchema({
         joinColumn: {
             name: 'user_id',
             },
-        cascade: true,
+        onDelete: "CASCADE",
         }
     },
     uniques: [
